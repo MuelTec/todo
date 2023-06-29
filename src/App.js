@@ -12,27 +12,28 @@ function App() {
   const [loading, setLoading] = useState(false)
 
   // Load todos on page load
- useEffect(() => {
-   const loadData = async () => {
-     setLoading(true)
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true)
 
-     const res = await fetch(API + "/todos")
-       .then((res) => res.json())
-       .then((data) => data)
-       .catch((err) => console.log(err));
+      const res = await fetch(API + "/todos")
+        .then((res) => res.json())
+        .then((data) => data)
+        .catch((err) => console.log(err));
 
-     setLoading(false);
+      setLoading(false);
 
-     setTodos(res);
-   }
+      setTodos(res);
+    }
 
-   loadData();
- }, []);
+    loadData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const todo = {
+      id: Math.random(),
       title,
       time,
       done: false,
@@ -75,17 +76,18 @@ function App() {
   const handleEdit = async (todo) => {
      todo.done = !todo.done;
 
+     var headers = new Headers();
+     headers.append("Content-Type", "application/json");
+     
     const data = await fetch(API + "/todos/" + todo.id,{
-      method: "PUT",
-      body: JSON.stringify(todo),
-      headers: {
-        "Contet-type": "appplication/json",
-      },
+       method: "PUT",
+       body: JSON.stringify(todo),
+       redirect: 'follow',
+       headers: headers,
+       
     });
 
-     setTodos((prevState) =>
-     prevState.map((t) => (t.id === data.id ? (t = data) : t)));
-
+    setTodos((prevState) => prevState.map((t) => (t.id === data.id) ? (t = data) : t))
   };
 
   if (loading) {

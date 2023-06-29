@@ -83,7 +83,7 @@ input[type='submit'] {
 
 .todo-done {
   text-decoration: line-through;
-  color: rgb (240, 98, 146);
+  color: rgb(240, 98, 146);
 }
 
 .todo p {
